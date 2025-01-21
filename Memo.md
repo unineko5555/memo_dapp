@@ -1,0 +1,1 @@
+#forge scriptコマンドではデフォルトでanvil1のウォレット。--private-keyまたは--mnemonicをつける
