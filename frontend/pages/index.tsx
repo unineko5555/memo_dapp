@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import MemoAppABI from '../artifacts/MemoApp.json';
 
-const contractAddress = "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e";
+//note: anvilやsepoliaでデプロイしたコントラクトのアドレスを指定するが自動で取得したい
+const contractAddress = "0xa39637afad8a3ea07d9c51e1141dbbd561bb42c7";
 
 interface Memo {
   id: number;
