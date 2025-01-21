@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import MemoAppABI from '../artifacts/MemoApp.json';
 
-//note: anvilやsepoliaでデプロイしたコントラクトのアドレスを指定するが自動で取得したい
 const contractAddress = "0xa39637afad8a3ea07d9c51e1141dbbd561bb42c7";
 
 interface Memo {
@@ -13,12 +12,23 @@ interface Memo {
 }
 
 export default function Home() {
-  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [contract, setContract] = useState<ethers.Contract | null>(null);
   const [memos, setMemos] = useState<Memo[]>([]);
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  // メモを取得する関数
+  const fetchMemos = useCallback(async () => {
+    if (!contract) return;
+    try {
+      const memos = await contract.getAllMemos();
+      setMemos(memos);
+    } catch (err) {
+      console.error("Error fetching memos:", err);
+      setError("Failed to fetch memos.");
+    }
+  }, [contract]);
 
   // プロバイダーとコントラクトの初期化
   useEffect(() => {
@@ -28,8 +38,7 @@ export default function Home() {
           const _provider = new ethers.BrowserProvider(window.ethereum);
           const signer = await _provider.getSigner();
           const _contract = new ethers.Contract(contractAddress, MemoAppABI.abi, signer);
-          
-          setProvider(_provider);
+
           setContract(_contract);
         } catch (err) {
           console.error("Error initializing provider and contract:", err);
@@ -43,17 +52,12 @@ export default function Home() {
     init();
   }, []);
 
-  // メモを取得する関数
-  const fetchMemos = async () => {
-    if (!contract) return;
-    try {
-      const memos = await contract.getAllMemos();
-      setMemos(memos);
-    } catch (err) {
-      console.error("Error fetching memos:", err);
-      setError("Failed to fetch memos.");
+  // コントラクトが初期化されたらメモを取得
+  useEffect(() => {
+    if (contract) {
+      fetchMemos();
     }
-  };
+  }, [contract, fetchMemos]);
 
   // メモを作成する関数
   const createMemo = async () => {
@@ -71,13 +75,6 @@ export default function Home() {
       setLoading(false);
     }
   };
-
-  // コントラクトが初期化されたらメモを取得
-  useEffect(() => {
-    if (contract) {
-      fetchMemos();
-    }
-  }, [contract]);
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
@@ -131,3 +128,4 @@ export default function Home() {
     </div>
   );
 }
+
