@@ -1,23 +1,23 @@
 import { ethers } from "ethers"; // ethers v6
 import dotenv from 'dotenv';
+dotenv.config();
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 async function main() {
   // コントラクトのコンパイルとデプロイ
   execSync("forge build");
+  //anvilへのデプロイ
   const provider = new ethers.JsonRpcProvider("http://localhost:8545"); // ethers v6
+  //sepoliaへのデプロイ
+  // const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
   const wallet = new ethers.Wallet(process.env.MY_PRIVATE_KEY, provider);
-
-  console.log("Private Key:", process.env.MY_PRIVATE_KEY);
-
   const MemoAppArtifact = JSON.parse(fs.readFileSync("out/MemoApp.sol/MemoApp.json", "utf8"));
   const MemoAppFactory = new ethers.ContractFactory(MemoAppArtifact.abi, MemoAppArtifact.bytecode, wallet);
   const memoApp = await MemoAppFactory.deploy();
