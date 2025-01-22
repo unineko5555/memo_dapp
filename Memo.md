@@ -1,1 +1,5 @@
 #forge scriptコマンドではデフォルトでanvil1のウォレット。--private-keyまたは--mnemonicをつける
+
+#forge buildして生成されるout/MemoApp.sol/MemoApp.jsonのabiをartifacts/MemoApp.jsonに貼り付け。ethereumではDeployAndCopy.jsで自動化しているがzksyncでは手動で
+
+#zkSyncにdeployするにはcreate2を使用して事前にきまったcaにdeployする必要があるが、うまくscriotが書けない

@@ -2,5 +2,7 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-
+#zkSync Era Sepolia は EIP-3855（PUSH0 命令）をサポートしていない可能性があるため
+# solc-version = "0.8.19"
+# solc-optimizer = true
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

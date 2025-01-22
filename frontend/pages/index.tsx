@@ -3,6 +3,9 @@ import { ethers } from 'ethers';
 import MemoAppABI from '../artifacts/MemoApp.json';
 
 const contractAddress = "0xa39637afad8a3ea07d9c51e1141dbbd561bb42c7";
+//zkSync deploy adress
+// const contractAddress = "0x6a41a2ce6fd587a0c82f7cdc5c4ab77bb1497ca4";
+
 
 interface Memo {
   id: number;
